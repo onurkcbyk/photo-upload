@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotoğraf Yükle</title>
+</head>
+<body>
+    <h1>Fotoğraf Yükleme</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="fileInput">Fotoğraf çek veya seç:</label><br><br>
+        <input type="file" accept="image/*" capture="camera" id="fileInput"><br><br>
+        <button type="button" onclick="uploadImage()">Fotoğrafı Yükle</button>
+    </form>
+
+    <p id="status"></p>
+
+    <script>
+        async function uploadImage() {
+            const input = document.getElementById('fileInput');
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch('https://<sunucu-adresiniz>/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                document.getElementById('status').innerText = result.message;
+            } catch (error) {
+                console.error('Fotoğraf yükleme hatası:', error);
+                document.getElementById('status').innerText = 'Yükleme başarısız oldu.';
+            }
+        }
+    </script>
+</body>
+</html>
